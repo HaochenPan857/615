@@ -1,0 +1,231 @@
+---
+title: "Client report"
+author: "Haochen Pan"
+date: "2022-12-05"
+output: html_document
+---
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(readr)
+data <- read_csv("https://raw.githubusercontent.com/HaochenPan857/675-consulting-evelyn/main/Stress%2C%20Empathy%20and%20Self-care_Dec2UPDATED(1).csv")
+data1 <- data[c("SC0","SC1", "SC2", "SC3", "SC4", "SC5")]
+data1[data1==0] <- NA
+data1<-data1[complete.cases(data1),]
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+summary(data1)
+describe(data1)
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(ggplot2)
+ggplot(data1, mapping=aes(x=SC1, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI Score")
+  
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(grid)
+library(gridExtra)
+r1 <- ggplot(data1, mapping=aes(x=SC2, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")
+r2 <- ggplot(data1, mapping=aes(x=SC3, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")
+r3 <- ggplot(data1, mapping=aes(x=SC4, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")
+r4 <- ggplot(data1, mapping=aes(x=SC5, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")
+grid.arrange(r1,r2,r3,r4, ncol = 4,top = textGrob("PSQ Score vs.Other empathy variable",gp=gpar(fontsize=15,font=3)))
+```
+
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+ggplot(data1, mapping=aes(x=SC2, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI-Fantasy scale Score")
+  
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(ggplot2)
+ggplot(data1, mapping=aes(x=SC3, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI- Empathy Concern Score")
+  
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(ggplot2)
+ggplot(data1, mapping=aes(x=SC4, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI-  Perspective Taking Score")
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(ggplot2)
+ggplot(data1, mapping=aes(x=SC5, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI- Personal Distress Score")
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(magrittr) 
+library(dplyr)
+library(stringr)
+data2 <- data[c("SC0","SC1", "SC2", "SC3", "SC4", "SC5", "Q83","Q85", "Q86...71", "Q87...72", "Q88...73","Q4","Q6","Q11", "Q12", "Q13", "Q14")]
+data2 = na.omit(data2)
+data2 <- data2 %>%
+   mutate(Q83 = str_replace(Q83,"No","0")) %>%
+   mutate(Q83 = str_replace(Q83,"Yes, 1-2 times per week","1")) %>%  
+   mutate(Q83 = str_replace(Q83,"Yes, 3 times per week","2")) %>%
+   mutate(Q83 = str_replace(Q83,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q85 = str_replace(Q85,"No","0")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, 1 times per week","1")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, 1x per month or less","2")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, every other week","3")) %>%
+  
+   mutate(Q86...71 = str_replace(Q86...71,"No","0")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 3 times per week","2")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q87...72 = str_replace(Q87...72,"No","0")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 3 times per week","2")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q88...73 = str_replace(Q88...73,"No","0")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 3 times per week","2")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q4 = str_replace(Q4,"Current first year","1")) %>%
+   mutate(Q4 = str_replace(Q4,"Current second year","2")) %>%  
+   
+
+   mutate(Q6 = str_replace(Q6,"20-24","1")) %>%
+   mutate(Q6 = str_replace(Q6,"25-29","2")) %>%
+   mutate(Q6 = str_replace(Q6,"30-34","3")) %>%
+   mutate(Q6 = str_replace(Q6,"35-39","4")) %>%
+   mutate(Q6 = str_replace(Q6,"40-44","5")) %>%
+  
+   mutate(Q11 = str_replace(Q11,"Divorced or separated","1")) %>%
+   mutate(Q11 = str_replace(Q11,"In a romantic relationship","2")) %>%
+   mutate(Q11 = str_replace(Q11,"Married","3")) %>%
+   mutate(Q11 = str_replace(Q11,"Single","4")) 
+
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+data_selfcare <- data2[c("Q83","Q85", "Q86...71", "Q87...72", "Q88...73")]
+library(psych)
+describe(data_selfcare)
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+s1 = ggplot(data2, aes(x=Q83, y=SC0, color=Q83)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+s2 = ggplot(data2, aes(x=Q85, y=SC0, color=Q85)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s3 = ggplot(data2, aes(x=Q86...71, y=SC0, color=Q86...71)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s4 = ggplot(data2, aes(x=Q87...72, y=SC0, color=Q87...72)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s5 = ggplot(data2, aes(x=Q88...73, y=SC0, color=Q88...73)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+grid.arrange(s1, s2, s3, s4, s5, ncol = 3,top = textGrob("PSQ Score vs. self-care variable",gp=gpar(fontsize=15,font=3)))
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+s6 = ggplot(data2, aes(x=Q83, y=SC1, color=Q83)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+s7 = ggplot(data2, aes(x=Q85, y=SC1, color=Q85)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s8 = ggplot(data2, aes(x=Q86...71, y=SC1, color=Q86...71)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s9 = ggplot(data2, aes(x=Q87...72, y=SC1, color=Q87...72)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s10 = ggplot(data2, aes(x=Q88...73, y=SC1, color=Q88...73)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+grid.arrange(s6, s7, s8, s9, s10, ncol = 3, top = textGrob("IRI Score vs. self-care variable",gp=gpar(fontsize=15,font=2)))
+```
+
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+data3 <- data2[c("SC0","Q4","Q6", "Q11")]
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+s11 = ggplot(data3, aes(x=Q4, y=SC0, color=Q4)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+s12 = ggplot(data3, aes(x=Q6, y=SC0, color=Q6)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s13 = ggplot(data3, aes(x=Q11, y=SC0, color=Q11)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+grid.arrange(s11,s12,s13, ncol = 2, top = textGrob("PSQ Score vs. other covariates ",gp=gpar(fontsize=15,font=2)))
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+s17 <- ggplot(data2, aes(x=Q4, y=SC0, color=Q4))+
+  geom_boxplot()+ geom_jitter(width = 0.2)
+s17
+```
+
+```{r}
+
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(coefplot)
+M1 = lm(SC1 ~ SC0 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+summary(M1)
+coef(M1)
+plot(M1)
+coefplot(M1)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+M2 = lm(SC0 ~ SC1 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+summary(M2)
+coef(M2)
+plot(M2)
+coefplot(M2)
+```
+
+

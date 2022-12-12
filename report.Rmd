@@ -1,0 +1,206 @@
+---
+title: "MSSP Consulting Report: Stress, Empathy and Self-care Analysis for Client Evelyn"
+author: "Armstrong Wang; Tianjian Xie; Haochen Pan; Nuo Chen; Haochen Zhu"
+date: "2022-12-12"
+output: html_document
+---
+
+## INTRODUCTION
+
+Our client is Evelyn Fisher from Boston University Graduate Medical Sciences, Genetic Counseling department. Her capstone is looking at self-reported levels of stress and empathy in current genetic counseling students. Our client’s 1st goal is to characterize stress, empathy, and self-care among genetic counseling students. Their second goal is to identify relationships between these characteristics. 
+
+##Data Description
+
+Data is collected through surveys adminstered to Genetic Counseling students throughout the US and Canada.  20 stress-related questions are converted into a score called PSQ (percieved stress questionaire).   28 IRI empathy-related questions are converted into a score called IRI (interpersonal reactivity index). There are 5 questions for self-care and some demographic questions.
+ 
+PSQ: Perceived Stress Questionnaire, which means levels of stress. 
+IRI: Interpersonal Reactivity Index, which means levels of empathy, there is 1 total score with 4 empathy variables score 
+Self-care Questions: Exercise, therapy, socializing, religion, hobby 
+Other covariance questions 
+
+## Characterization of Stress, Empathy and Self-Care through Exploratory Data Analysis 
+
+Summary statistics of stress, empathy and self care, including five number summaries, are included in the following figures. 
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+data <- read_csv("https://raw.githubusercontent.com/HaochenPan857/675-consulting-evelyn/main/Stress%2C%20Empathy%20and%20Self-care_Dec2UPDATED(1).csv")
+data1 <- data[c("SC0","SC1", "SC2", "SC3", "SC4", "SC5")]
+data1[data1==0] <- NA
+data1<-data1[complete.cases(data1),]
+summary(data1)
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(magrittr) 
+library(dplyr)
+library(stringr)
+data2 <- data[c("SC0","SC1", "SC2", "SC3", "SC4", "SC5", "Q83","Q85", "Q86...71", "Q87...72", "Q88...73","Q4","Q6","Q11", "Q12", "Q13", "Q14")]
+data2 = na.omit(data2)
+data2 <- data2 %>%
+   mutate(Q83 = str_replace(Q83,"No","0")) %>%
+   mutate(Q83 = str_replace(Q83,"Yes, 1-2 times per week","1")) %>%  
+   mutate(Q83 = str_replace(Q83,"Yes, 3 times per week","2")) %>%
+   mutate(Q83 = str_replace(Q83,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q85 = str_replace(Q85,"No","0")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, 1 times per week","1")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, 1x per month or less","2")) %>%
+   mutate(Q85 = str_replace(Q85,"Yes, every other week","3")) %>%
+  
+   mutate(Q86...71 = str_replace(Q86...71,"No","0")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 3 times per week","2")) %>%
+   mutate(Q86...71 = str_replace(Q86...71,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q87...72 = str_replace(Q87...72,"No","0")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 3 times per week","2")) %>%
+   mutate(Q87...72 = str_replace(Q87...72,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q88...73 = str_replace(Q88...73,"No","0")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 1-2 times per week","1")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 3 times per week","2")) %>%
+   mutate(Q88...73 = str_replace(Q88...73,"Yes, 3x per month or less","3")) %>%
+
+   mutate(Q4 = str_replace(Q4,"Current first year","1")) %>%
+   mutate(Q4 = str_replace(Q4,"Current second year","2")) %>%  
+   
+
+   mutate(Q6 = str_replace(Q6,"20-24","1")) %>%
+   mutate(Q6 = str_replace(Q6,"25-29","2")) %>%
+   mutate(Q6 = str_replace(Q6,"30-34","3")) %>%
+   mutate(Q6 = str_replace(Q6,"35-39","4")) %>%
+   mutate(Q6 = str_replace(Q6,"40-44","5")) %>%
+  
+   mutate(Q11 = str_replace(Q11,"Divorced or separated","1")) %>%
+   mutate(Q11 = str_replace(Q11,"In a romantic relationship","2")) %>%
+   mutate(Q11 = str_replace(Q11,"Married","3")) %>%
+   mutate(Q11 = str_replace(Q11,"Single","4")) 
+
+```
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+data_selfcare <- data2[c("Q83","Q85", "Q86...71", "Q87...72", "Q88...73")]
+library(psych)
+describe(data_selfcare)
+```
+
+The first figure shows the characteristics of PSQ and IRI, while the second one shows the information about self-care questions.
+
+Next, we explore the relationship between PSQ and IRI, which can be seen in the following figure. 
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(ggplot2)
+ggplot(data1, mapping=aes(x=SC1, y=SC0)) +
+  geom_point(shape=18, color="blue")+
+  geom_smooth(method=lm,  linetype="dashed",
+             color="darkred", fill="blue")+
+  ggtitle("Relationship bewtween PSQ Score and IRI Score")
+```
+
+This is the scatter plot between the PSQ score and IRI score after we clean the data. The smooth line is not very steep, and the points are not concentrated close to the line, indicating the relationship between these variables is weak. A similar pattern happens to other LRL variables scores. But that is still able to prove that there is a relationship between stress and empathy.
+
+The second step is the box plot for PSQ/IRI and self-care questions. 
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+library(grid)
+library(gridExtra)
+s1 = ggplot(data2, aes(x=Q83, y=SC0, color=Q83)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+s2 = ggplot(data2, aes(x=Q85, y=SC0, color=Q85)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s3 = ggplot(data2, aes(x=Q86...71, y=SC0, color=Q86...71)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s4 = ggplot(data2, aes(x=Q87...72, y=SC0, color=Q87...72)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s5 = ggplot(data2, aes(x=Q88...73, y=SC0, color=Q88...73)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+grid.arrange(s1, s2, s3, s4, s5, ncol = 3,top = textGrob("PSQ Score vs. self-care variable",gp=gpar(fontsize=15,font=3)))
+```
+
+
+```{r, echo=FALSE, message= FALSE, warning= FALSE}
+s6 = ggplot(data2, aes(x=Q83, y=SC1, color=Q83)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5)) 
+s7 = ggplot(data2, aes(x=Q85, y=SC1, color=Q85)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s8 = ggplot(data2, aes(x=Q86...71, y=SC1, color=Q86...71)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s9 = ggplot(data2, aes(x=Q87...72, y=SC1, color=Q87...72)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+s10 = ggplot(data2, aes(x=Q88...73, y=SC1, color=Q88...73)) + 
+  geom_boxplot()+
+  scale_x_discrete(breaks = seq(0, 100, by = 5))
+grid.arrange(s6, s7, s8, s9, s10, ncol = 3, top = textGrob("IRI Score vs. self-care variable",gp=gpar(fontsize=15,font=2)))
+```
+
+We can see that the question about exercise shows some relationship with PSQ and IRI, but a similar thing did not happen to other questions. We will explain it in the next parts.
+
+In the next part, we examine some demographic questions. that can also affect stress/empathy, such as the year of students. So we will put this in our modeling part.  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+s17 <- ggplot(data2, aes(x=Q4, y=SC0, color=Q4))+
+  geom_violin()+ geom_jitter(width = 0.2)
+s17
+```
+
+## Modeling 
+
+We first use the linear model to find relationships among all the variables with these two formulas:  
+
+empathy ~ stress + self_care_variables + Current Student Year + Age + Marrage situation
+
+stress ~ empathy + self_care_variables + Current Student Year + Age + Marrage situation
+
+And in a coefficient plot, we are able to see how these variables affect each other: 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(coefplot)
+M1 = lm(SC1 ~ SC0 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+coefplot(M1)
+M2 = lm(SC0 ~ SC1 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+coefplot(M2)
+```
+
+In the graph, we find some variables that worth analyzing. For example, in Q4, second year student have more stress increase comparing to first year students; in Q11, people in a romantic relationship will have lower stress than other situations. 
+
+## Discussion 
+For this part of the whole project, we are able to find some conclusions but there are still some problems.  
+1. More data has been collected since this analysis was run. A future analysis may be useful to see if additional data changes the results we see here.  
+2. As is common in survey data, some participants did not finish the survey, some participants do not have reliable answers, and some questions may not make the relationship be easy to see. Especially since it is conceivable that stress is related to whether or not someone finishes the survey, this could be a source of bias and a limitation of the study. 
+
+## CONCLUSION 
+The characterization for each type of question can be seen in the EDA and summary statistics. For the relationship among all the variables, we can see relationships in the visualizations between higher stress and lower empathy, although the relationship is not very strong. Our models suggest that there is not enough evidence to say that there is a relationship between stress and empathy or self care.  While for self-care, we should depend on specific self-care problems. Also, some specific covariance questions also make sense for the stress/empathy relationships. 
+
+## Appendix 
+
+This part is for residual plots. The first 4 are the empathy ~ stress + self_care_variables + Current Student Year + Age + Marrage situation formula and the rest are for the stress ~ empathy + self_care_variables + Current Student Year + Age + Marrage situation. We can also analyze these residual plots. 
+
+ 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+M1 = lm(SC1 ~ SC0 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+summary(M1)
+coef(M1)
+plot(M1)
+M2 = lm(SC0 ~ SC1 + Q83 + Q85 + Q86...71 + Q87...72 + Q88...73 + Q4 + Q6 + Q11 , data = data2)
+summary(M2)
+coef(M2)
+plot(M2)
+```
+
+
+
+
+
+
