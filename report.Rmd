@@ -9,7 +9,7 @@ output: html_document
 
 Our client is Evelyn Fisher from Boston University Graduate Medical Sciences, Genetic Counseling department. Her capstone is looking at self-reported levels of stress and empathy in current genetic counseling students. Our client’s 1st goal is to characterize stress, empathy, and self-care among genetic counseling students. Their second goal is to identify relationships between these characteristics. 
 
-##Data Description
+## Data Description
 
 Data is collected through surveys adminstered to Genetic Counseling students throughout the US and Canada.  20 stress-related questions are converted into a score called PSQ (percieved stress questionaire).   28 IRI empathy-related questions are converted into a score called IRI (interpersonal reactivity index). There are 5 questions for self-care and some demographic questions.
  
@@ -176,7 +176,7 @@ coefplot(M2)
 In the graph, we find some variables that worth analyzing. For example, in Q4, second year student have more stress increase comparing to first year students; in Q11, people in a romantic relationship will have lower stress than other situations. 
 
 ## Discussion 
-For this part of the whole project, we are able to find some conclusions but there are still some problems.  
+For this part of the whole project, we are able to find some conclusions but there is still future work that can be done and limitations of the current models.
 1. More data has been collected since this analysis was run. A future analysis may be useful to see if additional data changes the results we see here.  
 2. As is common in survey data, some participants did not finish the survey, some participants do not have reliable answers, and some questions may not make the relationship be easy to see. Especially since it is conceivable that stress is related to whether or not someone finishes the survey, this could be a source of bias and a limitation of the study. 
 
@@ -185,7 +185,7 @@ The characterization for each type of question can be seen in the EDA and summar
 
 ## Appendix 
 
-This part is for residual plots. The first 4 are the empathy ~ stress + self_care_variables + Current Student Year + Age + Marrage situation formula and the rest are for the stress ~ empathy + self_care_variables + Current Student Year + Age + Marrage situation. We can also analyze these residual plots. 
+We include the model output and diagnostic plots in the appendix. The first 4 are the empathy ~ stress + self_care_variables + Current Student Year + Age + Marrage situation formula and the rest are for the stress ~ empathy + self_care_variables + Current Student Year + Age + Marrage situation. We can also analyze these residual plots. 
 
  
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
