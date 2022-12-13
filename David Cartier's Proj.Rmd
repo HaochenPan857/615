@@ -46,7 +46,7 @@ ggplot(data = data1, aes(x = ISS, y = GCS)) +
   geom_smooth(method = 'loess')
 my_data2 <- my_data[-199,]
 ```
-Figure 1 shows that the patients' GCS are concentrated on top and bottom, and the smooth line is not linear. It can not prove our client's assumption that there is an inversely proportional correlation between ISS and GCS very well.
+In Figure 1, we can see that individuals with the largest GCS score tend to have a smaller ISS score.
 
 2. Total.Hospital.Days vs ISS
 ```{r echo=FALSE,warning=FALSE,message=FALSE, fig.cap='Figure 2: Total.Hospital.Days vs ISS', fig.align='center'}
@@ -58,12 +58,10 @@ use_rows <- setdiff(all_rows,na_rows)
 cleaned_data <- my_data %>% slice(use_rows)
 cleaned_data1 <- cleaned_data %>% select(ISS, Total.Hospital.Days)
 fit2 <- lm(Total.Hospital.Days~ISS, data = cleaned_data1)
-
-plot2 <- plot(cleaned_data1$ISS, cleaned_data1$Total.Hospital.Days, pch = 16, cex = 0.8, xlab = "ISS(Injury Severity Score)", ylab = "Total Hospital Days")
-plot2
+plot(cleaned_data1$ISS, cleaned_data1$Total.Hospital.Days, pch = 16, cex = 0.8, xlab = "ISS(Injury Severity Score)", ylab = "Total Hospital Days")
 abline(fit2)
 ```
-Figure 2 shows the correlation between the total days patients stay in hospital and their ISS. The fitting line shows there is a directional proportional correlation between patients' ISS and total days they spent in hospital. 
+Figure 2 shows the correlation between the total days patients stay in hospital and their ISS. The fitting line suggests that larger ISS is generally associated with longer stays in hospital. 
 
 3. Urban or Rural for ISS
 ```{r echo=FALSE,warning=FALSE,message=FALSE, fig.width=10, fig.cap='Figure 3: Violin Plot of Urban or Rural for ISS', fig.align='center'}
@@ -94,7 +92,7 @@ data5 %>%
 
 
 ```
-Figure 3 shows for ISS, urban and rural patients are likely to have similar ISS, and the means for both region are around 15. Compare to the rural patients, the urban patients' ISS are more concentrate to the mean since the violin are wider.
+Figure 3 shows for ISS, urban and rural patients are likely to have similar ISS, and the medians for both region are around 15. Compare to the rural patients, the urban patients' ISS are more concentrate to the median since the violin are wider.
 
 4. Urban or Rural for GCS 
 ```{r echo=FALSE,warning=FALSE,message=FALSE, fig.width=10, fig.cap='Figure 4: Violin Plot of Urban or Rural for GCS', fig.align='center'}
@@ -117,7 +115,7 @@ data7 %>%
     ylab("GCS Value")
 
 ```
-From figure 4, we can see that most of the patients' GCS are concentrated near 15, which is the top of the graph, and corresponding to less-severe injury. The concentration is somewhat larger for Urban compared to Rural. The explanation can be that people close to Maine Medical Center might go to Maine Medical Center even if they have less severe injuries, while people further away might not bother traveling that distance if they have less severe injuries.
+From figure 4, we can see that most of the patients' GCS are concentrated near 15, which is the top of the graph, and corresponding to less-severe injury. The concentration is somewhat larger for Urban compared to Rural. One possible explanation can be that people close to Maine Medical Center might go to Maine Medical Center even if they have less severe injuries, while people further away might not bother traveling that distance if they have less severe injuries.
 
 
 
